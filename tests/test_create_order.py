@@ -17,3 +17,7 @@ class TestCreateOrder:
         resp = api.create_order(payload)
         assert resp.status_code == 201
         assert "track" in resp.json()
+
+        track = resp.json().get("track")
+        if track:
+            api.cancel_order(track)

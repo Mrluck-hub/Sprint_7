@@ -10,7 +10,7 @@ def api():
 def courier_setup(api):
     payload = PayloadGenerator.courier_payload()
     api.create_courier(payload)
-
+    
     login_resp = api.login_courier({
         "login": payload["login"],
         "password": payload["password"]

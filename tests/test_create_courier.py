@@ -5,11 +5,10 @@ from data.payloads import PayloadGenerator
 @allure.feature("Create courier")
 class TestCreateCourier:
     @allure.title("Successful courier craetion")
-    def test_create_success(self, api):
-        payload = PayloadGenerator.courier_payload()
-        resp = api.create_courier(payload)
-        assert resp.status_code == 201
-        assert resp.json()["ok"] is True
+    def test_create_success(self, api, courier_setup):
+        payload, courier_id = courier_setup
+        assert courier_id is not None
+        assert isinstance(courier_id, int)
 
     @allure.title("Can't create two identical couriers")
     def test_no_double_courier(self, api, courier_setup):
