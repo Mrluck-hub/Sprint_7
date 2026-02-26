@@ -1,12 +1,16 @@
 import pytest
 import allure
 import random
+from data.payloads import PayloadGenerator
 
 @allure.feature("Delete courier")
 class TestDeleteCourier:
     @allure.title("Successful deleted courier")
     def test_delete_success(self, api, courier_setup):
-        i, courier_id = courier_setup
+        payload = PayloadGenerator.courier_payload()
+        api.create_courier(payload)
+        login_resp = api.login_courier(payload)
+        courier_id = login_resp.json()["id"]
         resp = api.delete_courier(courier_id)
         assert resp.status_code == 200
         assert resp.json()["ok"] is True

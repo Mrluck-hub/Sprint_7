@@ -8,27 +8,17 @@ def api():
 
 @pytest.fixture
 def courier_setup(api):
-    payload = PayloadGenerator.courier_payload()
-    api.create_courier(payload)
+    couriers = []
+    yield couriers
     
-    login_resp = api.login_courier({
-        "login": payload["login"],
-        "password": payload["password"]
-        })
-    courier_id = login_resp.json().get("id")
-
-    yield payload, courier_id
-
-    if courier_id:
-        api.delete_courier(courier_id)
+    for p in couriers:
+        r = api.login_courier(p)
+        if r.status_code == 200: api.delete_courier(r.json()["id"])
 
 @pytest.fixture
 def order_setup(api):
-    payload = PayloadGenerator.ORDER_DATA.copy()
-    resp = api.create_order(payload)
-    track = resp.json().get("track")
-
-    yield track
-
-    if track:
+    tracks_to_cancel = []
+    yield tracks_to_cancel
+    
+    for track in tracks_to_cancel:
         api.cancel_order(track)

@@ -31,10 +31,6 @@ class ScooterApi:
     def get_order_by_track(self, track):
         return requests.get(Urls.GET_ORDER_TRACK, params={"t": track})
     
-    @allure.step("PUT Accept order")
-    def accept_order(self, order_id, courier_id):
-        return requests.put(f"{Urls.ACCEPT_ORDER}/{order_id}", params={"courierId": courier_id})
-    
     @allure.step("PUT Cancel order")
     def cancel_order(self, track_number):
         return requests.put(Urls.CANCEL_ORDER, params={"track": track_number})
